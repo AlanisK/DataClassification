@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
     #reading dataset
 def get_dataset(all_data):
     
-    features = ["fixed acidity","volatile acidity","citric acid","residual sugar","chlorides","free sulfur dioxide","total sulfur dioxide","density","pH","sulphates","alcohol"]
+    features = ["volatile acidity","residual sugar","chlorides","total sulfur dioxide","density","pH","sulphates","alcohol"]
    
 
     data = pd.read_csv(all_data, header=0)
@@ -27,9 +27,8 @@ def get_dataset(all_data):
 x_data, y_data = get_dataset("winequality-red.csv")
 #split data set
 
-x_train, y_train, x_test, y_test = train_test_split(x_data, y_data, train_size= .75, shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= .75, shuffle=True)
  
-print(y_data.shape)
 
 
 #Logistic Regression
@@ -38,13 +37,17 @@ logReg_model.fit(x_train, y_train)
 logReg_predict = logReg_model.predict(x_test)
 
 # SVM
-gamma = 0.001
-c = 2
+gamma = .005
+c = 1
 svm_model = svm.SVC(kernel='poly', C=c,gamma=gamma)
 svm_model.fit(x_train, y_train)
 svm_predict = svm_model.predict(x_test)
 
+results = 'Logistic Regression Results:\n\nConfusion Matrix:\n' + (metrics.confusion_matrix(y_test, logReg_predict)).__str__() + '\n'+ (metrics.classification_report(y_test, logReg_predict)).__str__() +'\n\n'
 
+results += 'SVM Results with gamma = ' + gamma.__str__()+ ' and C = '+ c.__str__() + '\n\nConfusion Matrix:\n' + (metrics.confusion_matrix(y_test, svm_predict)).__str__() + '\n' + (metrics.classification_report(y_test, svm_predict)).__str__() +'\n\n'
+
+print (results)
 
 
 
