@@ -27,24 +27,20 @@ def get_dataset(all_data):
     labels = np.array(data["quality"])
     dataset = np.array(data[features5])
 
-    print(data['quality'].value_counts())
     count = np.zeros(9)
 
     for i in range(0, len(labels)):
         index = labels[i]
         count[index] += 1
     
-    print(count)
 
-    plt.bar([0,1, 2, 3, 4, 5, 6, 7, 8], count, alpha=.5)
-    plt.show()
 
-    return dataset, labels
+    return dataset, labels, count
 
 
 
 
-x_data, y_data = get_dataset("winequality-red.csv")
+x_data, y_data, count = get_dataset("winequality-red.csv")
 #split data set
 
 
@@ -55,11 +51,6 @@ x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= 
  
 
 
-# data = np.vstack(x_train.flatten(), y_train.flatten())
-# np.sort(data)
-
-# plt.plot(x_train.reshape(-1, 1), y_train.reshape(-1, 1), label="training DS", alpha = 0.5, color="g")
-# plt.show()
 #Logistic Regression
 logReg_model = LogisticRegression(max_iter=20000)
 logReg_model.fit(x_train, y_train)
@@ -73,7 +64,8 @@ svm_model.fit(x_train, y_train)
 svm_predict = svm_model.predict(x_test)
 
 #Nueral Network
-NN = MLPClassifier(hidden_layer_sizes=75)
+layer_number = 75
+NN = MLPClassifier(hidden_layer_sizes=layer_number)
 NN.fit(x_train, y_train)
 NN_predict = NN.predict(x_test)
 
@@ -81,8 +73,11 @@ results = 'Logistic Regression Results:\n\nConfusion Matrix:\n' + (metrics.confu
 
 results += 'SVM Results with gamma = ' + gamma.__str__()+ ' and C = '+ c.__str__() + '\n\nConfusion Matrix:\n' + (metrics.confusion_matrix(y_test, svm_predict)).__str__() + '\n' + (metrics.classification_report(y_test, svm_predict)).__str__() +'\n\n'
 
+results += 'NN Results with layer number of = ' + layer_number.__str__() + '\n\nConfusion Matrix:\n' + (metrics.confusion_matrix(y_test, NN_predict)).__str__() + '\n' + (metrics.classification_report(y_test, NN_predict)).__str__() +'\n\n'
+
 print (results)
-print ((metrics.classification_report(y_test, NN_predict)))
+plt.bar([i for i in range(0,9)], count, alpha=.5)
+plt.show()
 
 
 
