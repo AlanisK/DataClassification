@@ -5,9 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.preprocessing import LabelEncoder
 from sklearn import metrics
-from sklearn.neighbors import KNeighborsClassifier
 import sklearn.svm as svm 
 import matplotlib.pyplot as plt
 
