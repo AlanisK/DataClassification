@@ -15,20 +15,30 @@ import matplotlib.pyplot as plt
     #reading dataset
 def get_dataset(all_data):
     
-    features = ["volatile acidity","residual sugar","chlorides","total sulfur dioxide","density","pH","sulphates","alcohol"]
-   
+    # features = ["volatile acidity","residual sugar","chlorides","total sulfur dioxide","density","pH","sulphates","alcohol"]
+    # picking 5 random features to test different accuracies.
+    features = ["residual sugar","density","pH","alcohol"]
+    features2 = ["volatile acidity","chlorides","total sulfur dioxide","sulphates"]
+    features3 = ["volatile acidity","residual sugar","chlorides","total sulfur dioxide"]
+    features4 = ["residual sugar", "volatile acidity", "alcohol"]
+    features5 = ["alcohol", "volatile acidity", "density", "chlorides"]
 
     data = pd.read_csv(all_data, header=0)
-    labels = data["quality"]
-    dataset = data[features]
+    labels = np.data["quality"]
+    dataset = np.data[features5]
     
     return dataset, labels
 
 
+
 x_data, y_data = get_dataset("winequality-red.csv")
 #split data set
+print(type(x_data))
 
-x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= .75, shuffle=True)
+plt.scatter(x_data.reshape(-1, 1), y_data, alpha=.5)
+plt.show()
+
+x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= .75, shuffle=True, random_state=200)
  
 
 
@@ -36,16 +46,16 @@ x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= 
 logReg_model = LogisticRegression(max_iter=20000)
 logReg_model.fit(x_train, y_train)
 logReg_predict = logReg_model.predict(x_test)
-print("\n\n\n im here")
+
 # SVM
 gamma = 1
 c = 1
-svm_model = svm.SVC(kernel='linear', C=c,gamma=gamma)
+svm_model = svm.SVC(kernel='linear', C=c,gamma=gamma, max_iter=20000)
 svm_model.fit(x_train, y_train)
 svm_predict = svm_model.predict(x_test)
 
 #Nueral Network
-NN = MLPClassifier(hidden_layer_sizes=50)
+NN = MLPClassifier(hidden_layer_sizes=75)
 NN.fit(x_train, y_train)
 NN_predict = NN.predict(x_test)
 
@@ -53,6 +63,7 @@ results = 'Logistic Regression Results:\n\nConfusion Matrix:\n' + (metrics.confu
 
 results += 'SVM Results with gamma = ' + gamma.__str__()+ ' and C = '+ c.__str__() + '\n\nConfusion Matrix:\n' + (metrics.confusion_matrix(y_test, svm_predict)).__str__() + '\n' + (metrics.classification_report(y_test, svm_predict)).__str__() +'\n\n'
 
+print (results)
 print ((metrics.classification_report(y_test, NN_predict)))
 
 
