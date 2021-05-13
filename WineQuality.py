@@ -24,24 +24,42 @@ def get_dataset(all_data):
     features5 = ["alcohol", "volatile acidity", "density", "chlorides"]
 
     data = pd.read_csv(all_data, header=0)
-    labels = np.data["quality"]
-    dataset = np.data[features5]
+    labels = np.array(data["quality"])
+    dataset = np.array(data[features5])
+
+    print(data['quality'].value_counts())
+    count = np.zeros(9)
+
+    for i in range(0, len(labels)):
+        index = labels[i]
+        count[index] += 1
     
+    print(count)
+
+    plt.bar([0,1, 2, 3, 4, 5, 6, 7, 8], count, alpha=.5)
+    plt.show()
+
     return dataset, labels
+
 
 
 
 x_data, y_data = get_dataset("winequality-red.csv")
 #split data set
-print(type(x_data))
 
-plt.scatter(x_data.reshape(-1, 1), y_data, alpha=.5)
-plt.show()
+
+# plt.scatter(x_data, y_data, alpha=.5)
+# plt.show()
 
 x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size= .75, shuffle=True, random_state=200)
  
 
 
+# data = np.vstack(x_train.flatten(), y_train.flatten())
+# np.sort(data)
+
+# plt.plot(x_train.reshape(-1, 1), y_train.reshape(-1, 1), label="training DS", alpha = 0.5, color="g")
+# plt.show()
 #Logistic Regression
 logReg_model = LogisticRegression(max_iter=20000)
 logReg_model.fit(x_train, y_train)
